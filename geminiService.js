@@ -5,9 +5,10 @@ dotenv.config();
 // The client gets the API key from the environment variable `GEMINI_API_KEY`.
 const ai = new GoogleGenAI({});
 
-async function generateAffirmations() {
+async function generateMantra() {
     try {
-        const prompt = `Generate two unique positive affirmations. They should avoid repetition in structure or theme. Use different tones—one can be uplifting and energetic, while the other can be calm and reassuring. Make each one feel like it’s speaking to a different part of a person's journey (e.g., confidence, healing, self-worth, motivation, acceptance). Avoid clichés and make them feel personal.`
+        const prompt = `Generate a short, poetic mantra that someone could repeat daily for mindfulness and grounding.
+      Make it inspiring and unique.`
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: prompt,
@@ -16,20 +17,19 @@ async function generateAffirmations() {
                 responseSchema: {
                     type: Type.OBJECT,
                     properties: {
-                        affirmation1: { type: Type.STRING },
-                        affirmation2: { type: Type.STRING },
+                        mantra: { type: Type.STRING },
                     },
-                    propertyOrdering: ["affirmation1", "affirmation2"],
+                    propertyOrdering: ["mantra"],
                 }
             }
         });
-        console.log("Generated safety tips:", response.text);
+        console.log("Generated mantra:", response.text);
         const parsed = JSON.parse(response.text);
         return parsed;
     } catch (error) {
-        console.error("Error generating safety tips:", error);
-        throw new Error("Failed to generate safety tips");
+        console.error("Error generating mantra:", error);
+        throw new Error("Failed to generate mantra");
     }
 }
 
-export default generateAffirmations;
+export default generateMantra;
